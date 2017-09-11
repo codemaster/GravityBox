@@ -1,30 +1,14 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Handles gryoscopic movements and rotates the camera and gravity to match
+/// Handles rotating the camera and gravity to match
 /// </summary>
-public class GyroController : MonoBehaviour
+public class GravityController : MonoBehaviour
 {
 	/// <summary>
-	/// Checks if the gyroscope is even supported
+	/// At what speed do movements affect gravity & camera rotation
 	/// </summary>
-	public static bool Supported
-	{
-		get
-		{
-			return SystemInfo.supportsGyroscope;
-		}
-	}
-
-	/// <summary>
-	/// At what speed does the gyroscope affect gravity & camera rotation
-	/// </summary>
-	public float GyroAffectSpeed;
-
-	/// <summary>
-	/// If we are allowing keyboard control of the gravity manipulation
-	/// </summary>
-	private bool _allowKeyboardControl;
+	public float AffectSpeed;
 
 	/// <summary>
 	/// What gravity we are trying to lerp to
@@ -49,21 +33,14 @@ public class GyroController : MonoBehaviour
 		// Setup initial targets
 		_targetGravity = Physics.gravity;
 		_targetCameraRotation = Camera.main.transform.rotation;
+	}
 
-		if (Supported)
-		{
-			// Enable the gyroscope
-			Input.gyro.enabled = true;
-		}
-		else
-		{
-			Debug.LogWarning("Gyroscope not supported.", this);
-			if (Application.isEditor)
-			{
-				Debug.Log("Editor testing. Allowing keyboard control.", this);
-				_allowKeyboardControl = true;
-			}
-		}
+	/// <summary>
+	/// Handles a button press that rotates gravity clockwise
+	/// </summary>
+	public void RotateGravity()
+	{
+		RotateGravity(true);
 	}
 
 	/// <summary>
@@ -71,16 +48,6 @@ public class GyroController : MonoBehaviour
 	/// </summary>
 	private void Update()
 	{
-		// Normal gravity setting
-		if (!_allowKeyboardControl)
-		{
-			var gravityAngleDiff = Vector3.Angle(Physics.gravity, Input.gyro.gravity);
-			_targetCameraRotation = Camera.main.transform.rotation *
-				Quaternion.Euler(gravityAngleDiff * Vector3.forward);
-			_targetGravity = Input.gyro.gravity;
-			return;
-		}
-
 		// Keyboard - rotate gravity
 		if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow))
 		{
@@ -98,7 +65,7 @@ public class GyroController : MonoBehaviour
 	private void FixedUpdate()
 	{
 		Physics.gravity = Vector3.Slerp(Physics.gravity, _targetGravity,
-			Time.fixedDeltaTime * GyroAffectSpeed);
+			Time.fixedDeltaTime * AffectSpeed);
 	}
 
 	/// <summary>
@@ -107,7 +74,7 @@ public class GyroController : MonoBehaviour
 	private void LateUpdate()
 	{
 		Camera.main.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation,
-			_targetCameraRotation, Time.deltaTime * GyroAffectSpeed);
+			_targetCameraRotation, Time.deltaTime * AffectSpeed);
 	}
 
 	/// <summary>
@@ -115,7 +82,7 @@ public class GyroController : MonoBehaviour
 	/// </summary>
 	private void OnValidate()
 	{
-		GyroAffectSpeed = Mathf.Max(GyroAffectSpeed, 1f);
+		AffectSpeed = Mathf.Max(AffectSpeed, 1f);
 	}
 
 	/// <summary>
