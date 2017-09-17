@@ -20,6 +20,18 @@ public class Follower : MonoBehaviour
 	/// </summary>
 	public Transform Target;
 
+    /// <summary>
+    /// If the follower is in the position it's trying to get to
+    /// </summary>
+    /// <value><c>true</c> if in position; otherwise, <c>false</c>.</value>
+    public bool InPosition
+    {
+        get
+        {
+            return Vector3.SqrMagnitude(transform.position - _targetPosition) < Mathf.Epsilon;
+        }
+    }
+
 	/// <summary>
 	/// The position this object is lerping to
 	/// </summary>
@@ -39,7 +51,7 @@ public class Follower : MonoBehaviour
 	/// </summary>
 	private void Update()
 	{
-		// Update this objects position by lerping to the target position
+        // Update this objects position by lerping to the target position
 		transform.position = Vector3.Lerp(transform.position, _targetPosition,
 			Time.deltaTime * FollowSpeed);
 	}

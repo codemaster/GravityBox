@@ -10,6 +10,11 @@ public class GravityController : MonoBehaviour
 	/// </summary>
 	public float AffectSpeed;
 
+    /// <summary>
+    /// If the gravity controller is enabled and allowed to change gravity!
+    /// </summary>
+    public bool Enabled;
+
 	/// <summary>
 	/// What gravity we are trying to lerp to
 	/// </summary>
@@ -48,6 +53,12 @@ public class GravityController : MonoBehaviour
 	/// </summary>
 	private void Update()
 	{
+        // Check if this controller is enabled
+        if (!Enabled)
+        {
+            return;
+        }
+        
 		// Keyboard - rotate gravity
 		if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow))
 		{

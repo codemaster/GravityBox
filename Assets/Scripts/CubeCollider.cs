@@ -3,13 +3,27 @@
 [RequireComponent(typeof(Rigidbody))]
 public class CubeCollider : MonoBehaviour
 {
+    public ParticleSystem HitVFX;
+    
 	private void OnCollisionEnter(Collision collision)
 	{
-        //Debug.Log($"Collision with {collision.gameObject.name} had {collision.contacts.Length} contact points", this);
+        // We bumped into something so play a sound!
+        // TODO: play bump SFX
 
-        var center = GetCenterOfContactPoints(collision.contacts);
+        // If it is a wall and it has not yet been hit before
+        var hitWall = collision.transform.GetComponent<WallCollider>();
+        if (null != hitWall && !hitWall.Hit)
+        {
+            // Set the wall as hit!
+            hitWall.SetHit();
 
-        // TODO: Play VFX on center of collision!
+			// Play VFX on center of collision!
+			if (null != HitVFX)
+			{
+                var center = GetCenterOfContactPoints(collision.contacts);
+				Instantiate(HitVFX, center, Quaternion.LookRotation(-Physics.gravity));
+			}
+        }
 	}
 
     private static Vector3 GetCenterOfContactPoints(ContactPoint[] points)

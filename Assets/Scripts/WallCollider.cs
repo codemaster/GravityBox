@@ -18,27 +18,20 @@ public class WallCollider : MonoBehaviour
         _renderer = GetComponent<Renderer>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void SetHit()
     {
-        // Ensure it's our cube collider
-        // Ignore if we've been hit already
-        if (other.gameObject != _cubeCollider.gameObject || Hit)
-        {
-            return;
-        }
-
-        // We've been hit
+        // We've been hit!
         Hit = true;
 
-        // TODO: Play capture VFX
+		// TODO: Play capture VFX
 
-        // Increment our score
-        ++_scoreTracker.Score;
+		// Increment our score
+		++_scoreTracker.Score;
 
-        // Change our wall to be the fancy new material
-        if (HitMaterial != null)
-        {
-            _renderer.sharedMaterial = HitMaterial;
-        }
+		// Change our wall to be the fancy new material
+		if (HitMaterial != null)
+		{
+			_renderer.sharedMaterial = HitMaterial;
+		}
     }
 }

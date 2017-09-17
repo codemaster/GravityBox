@@ -1,3 +1,4 @@
+using TMPro;
 using Zenject;
 
 public class Dependencies : MonoInstaller<Dependencies>
@@ -8,5 +9,8 @@ public class Dependencies : MonoInstaller<Dependencies>
         Container.Bind<CubeCollider>().FromComponentInHierarchy().AsSingle();
         Container.Bind<ScoreTracker>().ToSelf().AsSingle();
         Container.Bind<LevelManager>().ToSelf().AsSingle().NonLazy();
+        Container.Bind<SoundManager>().ToSelf().AsSingle();
+        Container.Bind<LevelCamera>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<LevelIntroText>().FromComponentInHierarchy().AsSingle();
     }
 }
