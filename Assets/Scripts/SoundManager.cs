@@ -1,9 +1,14 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
-public class SoundManager
+public class SoundManager : MonoBehaviour
 {
-    public SoundManager(ScoreTracker scoreTracker)
+    [SerializeField]
+    private SoundConfig _soundConfig;
+
+    [Inject]
+    public void Initialize(ScoreTracker scoreTracker)
     {
         if (null == scoreTracker)
         {
@@ -15,8 +20,28 @@ public class SoundManager
 
     private void OnScoreIncreased(int score)
     {
-        // TODO: Modulo the score by the number of hit sounds we have
-        // TODO: Play that sound!
+        var pitch = 1.0f;
+        if (_soundConfig.ScorePitches.Length > 0)
+        {
+            var pitchNum = (score - 1) % _soundConfig.ScorePitches.Length;
+            pitch = _soundConfig.ScorePitches[pitchNum];
+        }
+
+        OneShot(_soundConfig.ScoreSound, pitch);
+    }
+
+    private static void OneShot(AudioClip clip, float pitch = 1.0f, float volume = 1.0f)
+    {
+        if (null == clip)
+        {
+            throw new ArgumentNullException(nameof(clip));
+        }
+        
+        var obj = new GameObject();
+        var audio = obj.AddComponent<AudioSource>();
+        audio.pitch = pitch;
+        audio.PlayOneShot(clip, volume);
+        Destroy(obj, clip.length / pitch);
     }
 
     // TODO: BGM?
