@@ -3,6 +3,7 @@
 /// <summary>
 /// Handles rotating the camera and gravity to match
 /// </summary>
+[RequireComponent(typeof(Rigidbody))]
 public class GravityController : MonoBehaviour
 {
 	/// <summary>
@@ -13,7 +14,23 @@ public class GravityController : MonoBehaviour
     /// <summary>
     /// If the gravity controller is enabled and allowed to change gravity!
     /// </summary>
-    public bool Enabled;
+    public bool Enabled
+    {
+        get
+        {
+            return _enabled;
+        }
+        set
+        {
+            if (null != _rigidBodyComponent)
+            {
+                _rigidBodyComponent.useGravity = value;
+                _rigidBodyComponent.isKinematic = !value;
+            }
+
+            _enabled = value;
+        }
+    }
 
 	/// <summary>
 	/// What gravity we are trying to lerp to
@@ -25,6 +42,16 @@ public class GravityController : MonoBehaviour
 	/// </summary>
 	private Quaternion _targetCameraRotation;
 
+    /// <summary>
+    /// The rigidbody component
+    /// </summary>
+    private Rigidbody _rigidBodyComponent;
+
+    /// <summary>
+    /// If the gravity controller is enabled or not
+    /// </summary>
+    private bool _enabled;
+
 	/// <summary>
 	/// How much a single turn will rotate everything in euclidian degrees
 	/// </summary>
@@ -35,6 +62,10 @@ public class GravityController : MonoBehaviour
 	/// </summary>
 	private void Start()
 	{
+        // Turn off gravity initially
+        _rigidBodyComponent = GetComponent<Rigidbody>();
+        Enabled = false;
+
 		// Setup initial targets
 		_targetGravity = Physics.gravity;
 		_targetCameraRotation = Camera.main.transform.rotation;
