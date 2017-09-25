@@ -11,5 +11,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bda3cbcb28784d0989b4e2240a0e2a7, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
-  LevelSceneAssets: []
-  LevelScenes: []
+  LevelSceneAssets:
+  - {fileID: 102900000, guid: 1578be3546947a4468becedc5ab51585, type: 3}
+  - {fileID: 102900000, guid: 55e8b0cc889754417ab13f9b15a801a9, type: 3}
+  - {fileID: 102900000, guid: 07e10842a1b4643139c4fa8acbe8ee14, type: 3}
+  LevelScenes:
+  - Level1
+  - Level2
+  - Finish

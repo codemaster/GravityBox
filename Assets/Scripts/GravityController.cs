@@ -52,6 +52,11 @@ public class GravityController : MonoBehaviour
     /// </summary>
     private bool _enabled;
 
+    /// <summary>
+    /// Helper to save the default gravity
+    /// </summary>
+    private static Vector3? DefaultGravity;
+
 	/// <summary>
 	/// How much a single turn will rotate everything in euclidian degrees
 	/// </summary>
@@ -62,6 +67,17 @@ public class GravityController : MonoBehaviour
 	/// </summary>
 	private void Start()
 	{
+        // If we don't have a default gravity, let's get one setup now
+        if (!DefaultGravity.HasValue)
+        {
+            DefaultGravity = Physics.gravity;
+        }
+        else
+        {
+            // Set gravity to the default
+            Physics.gravity = DefaultGravity.Value;
+        }
+        
         // Turn off gravity initially
         _rigidBodyComponent = GetComponent<Rigidbody>();
         Enabled = false;

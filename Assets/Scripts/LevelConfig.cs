@@ -32,7 +32,10 @@ public class LevelConfig : ScriptableObject
         LevelScenes.Clear();
         foreach (var sceneAsset in LevelSceneAssets)
         {
-            LevelScenes.Add(sceneAsset.name);
+            if (null != sceneAsset)
+            {
+                LevelScenes.Add(sceneAsset.name);
+            }
         }
     }
 }

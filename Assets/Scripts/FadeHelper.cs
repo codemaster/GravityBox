@@ -36,7 +36,7 @@ public static class FadeHelper
             fadeAmount += Time.deltaTime / timeToFade;
             text.alpha = Mathf.Lerp(text.alpha, alphaValue, fadeAmount);
             yield return null;
-        }
+		}
 
         // Trigger callback if defined
         callback?.Invoke();

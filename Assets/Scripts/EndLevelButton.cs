@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using System.Collections;
 using TMPro;
 using Zenject;
 
@@ -44,10 +43,10 @@ public class EndLevelButton : MonoBehaviour, IFadeable
     private Image _image;
 
     /// <summary>
-    /// The level manager.
+    /// The level loader.
     /// </summary>
     [Inject]
-    private LevelManager _levelManager;
+    private LevelLoader _levelLoader;
 
     /// <summary>
     /// The button component.
@@ -81,6 +80,7 @@ public class EndLevelButton : MonoBehaviour, IFadeable
         }
 
         _buttonComponent = GetComponent<Button>();
+        _buttonComponent.enabled = false;
         _buttonComponent.onClick.AddListener(OnClick);
     }
     
@@ -91,6 +91,7 @@ public class EndLevelButton : MonoBehaviour, IFadeable
 	{
 		StartCoroutine(FadeHelper.FadeOverTime(_text, 1f, FadeInTime, OnFadeIn));
         StartCoroutine(FadeHelper.FadeOverTime(_image, 1f, FadeInTime, OnFadeIn));
+        _buttonComponent.enabled = true;
 	}
 
 	/// <summary>
@@ -100,6 +101,7 @@ public class EndLevelButton : MonoBehaviour, IFadeable
 	{
 		StartCoroutine(FadeHelper.FadeOverTime(_text, 0f, FadeOutTime, OnFadeOut));
         StartCoroutine(FadeHelper.FadeOverTime(_image, 0f, FadeOutTime, OnFadeOut));
+        _buttonComponent.enabled = false;
 	}
 
     /// <summary>
@@ -116,6 +118,6 @@ public class EndLevelButton : MonoBehaviour, IFadeable
     /// </summary>
     private void OnClick()
     {
-        _levelManager.LoadNextLevel();
+        StartCoroutine(_levelLoader.LoadNextLevel());
     }
 }

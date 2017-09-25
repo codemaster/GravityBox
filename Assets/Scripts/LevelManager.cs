@@ -6,17 +6,12 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class LevelManager
 {
-	/// <summary>
-	/// What level number are we on
-	/// </summary>
-	public int LevelNumber { get; private set; } = 1;
-
     /// <summary>
-    /// The next level to load
+    /// The level loader.
     /// </summary>
-    private int _nextLevelToLoad;
-
-    /// <summary>
+    private LevelLoader _levelLoader;
+    
+	/// <summary>
     /// The level camera.
     /// </summary>
     private LevelCamera _levelCamera;
@@ -49,14 +44,14 @@ public class LevelManager
 	/// <summary>
 	/// Constructor
 	/// </summary>
-	/// <param name="levelConfig">Level config.</param>
+    /// <param name="levelLoader">Level loader.</param>
 	/// <param name="levelCamera">Level camera.</param>
 	/// <param name="gravityController">Gravity controller.</param>
 	/// <param name="scoreTracker">Score tracker.</param>
 	/// <param name="levelIntroText">Level intro text.</param>
     /// <param name="endLevelButton">End level button.</param>
 	public LevelManager(
-        LevelConfig levelConfig,
+        LevelLoader levelLoader,
         LevelCamera levelCamera,
         GravityController gravityController,
         ScoreTracker scoreTracker,
@@ -64,9 +59,9 @@ public class LevelManager
         LevelOutroText levelOutroText,
         EndLevelButton endLevelButton)
     {
-        if (null == levelConfig)
+        if (null == levelLoader)
         {
-            throw new ArgumentNullException(nameof(levelConfig));
+            throw new ArgumentNullException(nameof(levelLoader));
         }
         if (null == levelCamera)
         {
@@ -93,6 +88,7 @@ public class LevelManager
             throw new ArgumentNullException(nameof(endLevelButton));
         }
 
+        _levelLoader = levelLoader;
         _levelCamera = levelCamera;
         _gravityController = gravityController;
         _scoreTracker = scoreTracker;
@@ -100,28 +96,24 @@ public class LevelManager
         _levelOutroText = levelOutroText;
         _endLevelButton = endLevelButton;
 
+        // Setup callbacks
         _scoreTracker.OnScoreIncreased += OnScoreIncreased;
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
         _levelIntroText.OnFadeIn.AddListener(OnLevelIntroTextFadedIn);
         _levelIntroText.OnFadeOut.AddListener(OnLevelIntroTextFadedOut);
+
+		// Update the intro text
+		_levelIntroText.SetLevel(_levelLoader.LevelNumber);
+
+		// Start showing the text
+		_levelIntroText.FadeIn();
+
+		// Fade out outro items
+		_levelOutroText.FadeOut();
+		_endLevelButton.FadeOut();
+
+		// Reset & recalculate the target score when the scene has loaded
+		_scoreTracker.Initialize();
 	}
-
-    /// <summary>
-    /// Destructor
-    /// </summary>
-    ~LevelManager()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    /// <summary>
-    /// Loads the next level.
-    /// </summary>
-    public void LoadNextLevel()
-    {
-        UnityEngine.Debug.Log("Load level #" + _nextLevelToLoad);
-    }
 
     /// <summary>
     /// When the intro text has faded in
@@ -137,6 +129,7 @@ public class LevelManager
     /// </summary>
     private void OnLevelIntroTextFadedOut()
     {
+        UnityEngine.Debug.Log("Callback from text faded out");
         _levelIntroText.OnFadeOut.RemoveListener(OnLevelIntroTextFadedOut);
 
 		// Then let the camera conduct its following logic
@@ -144,20 +137,6 @@ public class LevelManager
 
 		// Enable the gravity controller, now that we've introduced the level
 		_gravityController.Enabled = true;
-    }
-
-    /// <summary>
-    /// Handler for when the scene has loaded
-    /// </summary>
-    /// <param name="scene">The scene that was loaded</param>
-    /// <param name="mode">How the scene was loaded</param>
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // Start showing the text
-        _levelIntroText.FadeIn();
-
-        // Reset & recalculate the target score when the scene has loaded
-        _scoreTracker.Initialize();
     }
 
     /// <summary>
@@ -171,14 +150,14 @@ public class LevelManager
             return;
         }
 
+        // Set the ending text to the current level
+        _levelOutroText.SetFinishedLevel(_levelLoader.LevelNumber);
+
         // Turn off the gravity controller
         _gravityController.Enabled = false;
 
         // Show outro text & button
         _levelOutroText.FadeIn();
         _endLevelButton.FadeIn();
-
-        // Set our next level to load to be the next level!
-        _nextLevelToLoad = LevelNumber + 1;
     }
 }
