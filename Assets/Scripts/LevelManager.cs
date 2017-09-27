@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages each level (scene)
@@ -20,6 +19,11 @@ public class LevelManager
     /// The gravity controller.
     /// </summary>
     private GravityController _gravityController;
+
+    /// <summary>
+    /// The time tracker.
+    /// </summary>
+    private TimeTracker _timeTracker;
     
     /// <summary>
     /// The score tracker.
@@ -47,6 +51,7 @@ public class LevelManager
     /// <param name="levelLoader">Level loader.</param>
 	/// <param name="levelCamera">Level camera.</param>
 	/// <param name="gravityController">Gravity controller.</param>
+    /// <param name="timeTracker">Time Tracker.</param>
 	/// <param name="scoreTracker">Score tracker.</param>
 	/// <param name="levelIntroText">Level intro text.</param>
     /// <param name="endLevelButton">End level button.</param>
@@ -55,6 +60,7 @@ public class LevelManager
         LevelCamera levelCamera,
         GravityController gravityController,
         ScoreTracker scoreTracker,
+        TimeTracker timeTracker,
         LevelIntroText levelIntroText,
         LevelOutroText levelOutroText,
         EndLevelButton endLevelButton)
@@ -70,6 +76,10 @@ public class LevelManager
         if (null == gravityController)
         {
             throw new ArgumentNullException(nameof(gravityController));
+        }
+        if (null == timeTracker)
+        {
+            throw new ArgumentNullException(nameof(timeTracker));
         }
         if (null == scoreTracker)
         {
@@ -91,6 +101,7 @@ public class LevelManager
         _levelLoader = levelLoader;
         _levelCamera = levelCamera;
         _gravityController = gravityController;
+        _timeTracker = timeTracker;
         _scoreTracker = scoreTracker;
         _levelIntroText = levelIntroText;
         _levelOutroText = levelOutroText;
@@ -129,7 +140,6 @@ public class LevelManager
     /// </summary>
     private void OnLevelIntroTextFadedOut()
     {
-        UnityEngine.Debug.Log("Callback from text faded out");
         _levelIntroText.OnFadeOut.RemoveListener(OnLevelIntroTextFadedOut);
 
 		// Then let the camera conduct its following logic
@@ -137,6 +147,9 @@ public class LevelManager
 
 		// Enable the gravity controller, now that we've introduced the level
 		_gravityController.Enabled = true;
+
+        // Start the timer
+        _timeTracker.StartTimer(_levelLoader.LevelNumber);
     }
 
     /// <summary>
@@ -149,6 +162,9 @@ public class LevelManager
         {
             return;
         }
+
+        // Stop the timer
+        _timeTracker.StopTimer(_levelLoader.LevelNumber);
 
         // Set the ending text to the current level
         _levelOutroText.SetFinishedLevel(_levelLoader.LevelNumber);

@@ -42,6 +42,12 @@ public class FinishScreen : MonoBehaviour
     /// </summary>
     [Inject]
     EndLevelButton _endLevelButton;
+
+    /// <summary>
+    /// The time tracker.
+    /// </summary>
+    [Inject]
+    TimeTracker _timeTracker;
     
     /// <summary>
     /// Initialization
@@ -57,7 +63,7 @@ public class FinishScreen : MonoBehaviour
         {
             _endLevelButton.FadeOut();
         }
-        
+
         if (null != _retryButton)
         {
             _retryButton.onClick.AddListener(OnRetryClick);
@@ -65,8 +71,7 @@ public class FinishScreen : MonoBehaviour
 
         if (null != _congratsText)
         {
-            // TODO: Calculate time
-            _congratsText.text = string.Format(CongratsMessageFormat, "00:00:00");
+            _congratsText.text = string.Format(CongratsMessageFormat, GetCompletionTime());
         }
 	}
 
@@ -76,5 +81,32 @@ public class FinishScreen : MonoBehaviour
     private void OnRetryClick()
     {
         StartCoroutine(_levelLoader.Restart());
+    }
+
+    /// <summary>
+    /// Get the string representing the amount of time it took to complete the levels
+    /// </summary>
+    /// <returns>The completion time.</returns>
+    private string GetCompletionTime()
+    {
+        if (_timeTracker == null)
+        {
+            return "Unknown Time";
+        }
+
+        var totalMs = _timeTracker.TotalMilliseconds();
+
+        var numHours = (int)(totalMs / 3600000);
+        totalMs -= (numHours * 3600000);
+
+        var numMinutes = (int)(totalMs / 60000);
+        totalMs -= (numMinutes * 60000);
+
+        var numSeconds = (int)(totalMs / 1000);
+        //totalMs -= (numSeconds * 1000);
+
+        _timeTracker.Reset();
+
+        return $"{numHours:00}:{numMinutes:00}:{numSeconds:00}";
     }
 }

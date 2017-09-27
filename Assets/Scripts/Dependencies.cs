@@ -11,6 +11,7 @@ public class Dependencies : MonoInstaller<Dependencies>
     public override void InstallBindings()
     {
         Container.Bind<ScoreTracker>().ToSelf().AsSingle();
+        Container.Bind<TimeTracker>().ToSelf().AsSingle();
         Container.Bind<LevelConfig>().FromInstance(_levelConfig).AsSingle();
         Container.Bind<SoundManager>().FromComponentInNewPrefab(_soundManagerPrefab)
                  .AsSingle().NonLazy();
