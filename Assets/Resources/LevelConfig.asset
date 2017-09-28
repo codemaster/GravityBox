@@ -14,8 +14,14 @@ MonoBehaviour:
   LevelSceneAssets:
   - {fileID: 102900000, guid: 1578be3546947a4468becedc5ab51585, type: 3}
   - {fileID: 102900000, guid: 55e8b0cc889754417ab13f9b15a801a9, type: 3}
+  - {fileID: 102900000, guid: e472a3f7619af4aa4a0788dc551844f9, type: 3}
+  - {fileID: 102900000, guid: 162dc65db4fa844f792389c14d95a716, type: 3}
+  - {fileID: 102900000, guid: 56c9e61a3231b4ff4a7dba6e6d821755, type: 3}
   - {fileID: 102900000, guid: 07e10842a1b4643139c4fa8acbe8ee14, type: 3}
   LevelScenes:
   - Level1
   - Level2
+  - Level3
+  - Level4
+  - Level5
   - Finish
