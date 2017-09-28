@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b075102ba568d44f9ab17e92a9264129, type: 3}
   m_Name: SoundConfig
   m_EditorClassIdentifier: 
+  BGM: {fileID: 8300000, guid: ed486807d9828420fb3549ee08b5f9d3, type: 3}
   ScoreSound: {fileID: 8300000, guid: 9fb2cdb0c78294993b96eeb1ad1b52fd, type: 3}
   ScorePitches:
   - 0.6

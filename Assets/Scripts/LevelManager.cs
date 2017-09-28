@@ -14,6 +14,11 @@ public class LevelManager
     /// The level camera.
     /// </summary>
     private LevelCamera _levelCamera;
+
+    /// <summary>
+    /// The sound manager.
+    /// </summary>
+    private SoundManager _soundManager;
     
     /// <summary>
     /// The gravity controller.
@@ -59,6 +64,7 @@ public class LevelManager
         LevelLoader levelLoader,
         LevelCamera levelCamera,
         GravityController gravityController,
+        SoundManager soundManager,
         ScoreTracker scoreTracker,
         TimeTracker timeTracker,
         LevelIntroText levelIntroText,
@@ -76,6 +82,10 @@ public class LevelManager
         if (null == gravityController)
         {
             throw new ArgumentNullException(nameof(gravityController));
+        }
+        if (null == soundManager)
+        {
+            throw new ArgumentNullException(nameof(soundManager));
         }
         if (null == timeTracker)
         {
@@ -102,6 +112,7 @@ public class LevelManager
         _levelCamera = levelCamera;
         _gravityController = gravityController;
         _timeTracker = timeTracker;
+        _soundManager = soundManager;
         _scoreTracker = scoreTracker;
         _levelIntroText = levelIntroText;
         _levelOutroText = levelOutroText;
@@ -148,6 +159,9 @@ public class LevelManager
 		// Enable the gravity controller, now that we've introduced the level
 		_gravityController.Enabled = true;
 
+        // Start the music
+        _soundManager.StartBGM(_levelLoader.LevelNumber);
+
         // Start the timer
         _timeTracker.StartTimer(_levelLoader.LevelNumber);
     }
@@ -165,6 +179,9 @@ public class LevelManager
 
         // Stop the timer
         _timeTracker.StopTimer(_levelLoader.LevelNumber);
+
+        // Stop the music
+        _soundManager.StopBGM();
 
         // Set the ending text to the current level
         _levelOutroText.SetFinishedLevel(_levelLoader.LevelNumber);

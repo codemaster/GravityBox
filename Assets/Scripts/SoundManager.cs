@@ -7,6 +7,8 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private SoundConfig _soundConfig;
 
+    private AudioSource _audioComponent;
+
     [Inject]
     public void Initialize(ScoreTracker scoreTracker)
     {
@@ -15,6 +17,7 @@ public class SoundManager : MonoBehaviour
             throw new ArgumentNullException(nameof(scoreTracker));
         }
 
+        _audioComponent = gameObject.AddComponent<AudioSource>();
         scoreTracker.OnScoreIncreased += OnScoreIncreased;
     }
 
@@ -44,5 +47,29 @@ public class SoundManager : MonoBehaviour
         Destroy(obj, clip.length / pitch);
     }
 
-    // TODO: BGM?
+    public void StartBGM(int levelNumber)
+    {
+        if(_audioComponent == null)
+        {
+            return;
+        }
+
+        StopBGM();
+
+        _audioComponent.pitch = DetermineBGMPitchByLevel(levelNumber);
+        _audioComponent.clip = _soundConfig.BGM;
+        _audioComponent.loop = true;
+        _audioComponent.Play();
+    }
+
+    public void StopBGM()
+    {
+        _audioComponent.Stop();
+    }
+
+    private float DetermineBGMPitchByLevel(int levelNumber)
+    {
+        var pitchMod = levelNumber * (float)Math.Pow(-1, levelNumber) * 0.05f;
+        return 1.0f + pitchMod;
+    }
 }
