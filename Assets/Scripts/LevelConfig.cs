@@ -23,6 +23,7 @@ public class LevelConfig : ScriptableObject
     [HideInInspector]
     public List<string> LevelScenes;
 
+#if UNITY_EDITOR
     /// <summary>
     /// When the Unity inspector validates the assets,
     /// regenerate the list of names for the game to utilize.
@@ -38,4 +39,5 @@ public class LevelConfig : ScriptableObject
             }
         }
     }
+#endif
 }
