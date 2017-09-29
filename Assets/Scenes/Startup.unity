@@ -660,6 +660,7 @@ MonoBehaviour:
       PublicKeyToken=null
   FadeInTime: 2
   FadeOutTime: 2
+  _eventSystem: {fileID: 764825811}
   _text: {fileID: 1438776085}
   _image: {fileID: 1055705078}
 --- !u!1 &1220099775

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using Zenject;
@@ -29,6 +30,12 @@ public class EndLevelButton : MonoBehaviour, IFadeable
 	/// The amount of time it will take the text to fade out
 	/// </summary>
 	public float FadeOutTime;
+
+    /// <summary>
+    /// The event system.
+    /// </summary>
+    [SerializeField]
+    private EventSystem _eventSystem;
 
     /// <summary>
     /// Text that will be on the button
@@ -119,6 +126,7 @@ public class EndLevelButton : MonoBehaviour, IFadeable
 		_buttonComponent.enabled = true;
 		_text.enabled = true;
 		_image.enabled = true;
+        _eventSystem.SetSelectedGameObject(gameObject);
     }
 
     /// <summary>
