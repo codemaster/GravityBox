@@ -79,9 +79,12 @@ public class EndLevelButton : MonoBehaviour, IFadeable
             _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0f);
         }
 
+        OnFadeIn.AddListener(EnableComponents);
+        OnFadeOut.AddListener(DisableComponents);
+
         _buttonComponent = GetComponent<Button>();
-        _buttonComponent.enabled = false;
         _buttonComponent.onClick.AddListener(OnClick);
+        DisableComponents();
     }
     
     /// <summary>
@@ -89,6 +92,8 @@ public class EndLevelButton : MonoBehaviour, IFadeable
 	/// </summary>
 	public void FadeIn()
 	{
+		_text.enabled = true;
+		_image.enabled = true;
 		StartCoroutine(FadeHelper.FadeOverTime(_text, 1f, FadeInTime, OnFadeIn));
         StartCoroutine(FadeHelper.FadeOverTime(_image, 1f, FadeInTime, OnFadeIn));
         _buttonComponent.enabled = true;
@@ -102,7 +107,29 @@ public class EndLevelButton : MonoBehaviour, IFadeable
 		StartCoroutine(FadeHelper.FadeOverTime(_text, 0f, FadeOutTime, OnFadeOut));
         StartCoroutine(FadeHelper.FadeOverTime(_image, 0f, FadeOutTime, OnFadeOut));
         _buttonComponent.enabled = false;
+		_text.enabled = false;
+		_image.enabled = false;
 	}
+
+    /// <summary>
+    /// Enables the components.
+    /// </summary>
+    private void EnableComponents()
+    {
+		_buttonComponent.enabled = true;
+		_text.enabled = true;
+		_image.enabled = true;
+    }
+
+    /// <summary>
+    /// Disables the components.
+    /// </summary>
+    private void DisableComponents()
+    {
+		_buttonComponent.enabled = false;
+		_text.enabled = false;
+		_image.enabled = false;
+    }
 
     /// <summary>
     /// Sets the text of the button depending on success or failure
