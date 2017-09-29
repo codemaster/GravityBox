@@ -872,6 +872,7 @@ MonoBehaviour:
   _soundManagerPrefab: {fileID: 114072036048329196, guid: 8ae150ef10330478296f522399cc264d,
     type: 2}
   _levelConfig: {fileID: 11400000, guid: 5c3b911a93c134166830d3ab107c8905, type: 2}
+  _sparks: {fileID: 198398337471386448, guid: 2f95458e4e2d2453c8f403e1ccd2ece5, type: 2}
 --- !u!114 &1336322694
 MonoBehaviour:
   m_ObjectHideFlags: 0

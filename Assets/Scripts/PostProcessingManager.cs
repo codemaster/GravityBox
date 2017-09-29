@@ -37,9 +37,7 @@ public class PostProcessingManager : MonoBehaviour
     {
         const int maxShift = 180;
         var step = (float) (2 * maxShift) / maxLevels;
-        Debug.Log("Each step is " + step);
         var shift = (levelNumber - 1) * step * (float)Math.Pow(-1, levelNumber);
-        Debug.Log("Shift for " + levelNumber + " is " + shift);
         return (int) Mathf.Clamp(shift, -maxShift, maxShift);
     }
 }

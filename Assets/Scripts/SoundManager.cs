@@ -2,13 +2,27 @@
 using UnityEngine;
 using Zenject;
 
+/// <summary>
+/// Sound manager.
+/// </summary>
 public class SoundManager : MonoBehaviour
 {
+    /// <summary>
+    /// The sound config.
+    /// </summary>
     [SerializeField]
     private SoundConfig _soundConfig;
 
+    /// <summary>
+    /// The audio component.
+    /// </summary>
     private AudioSource _audioComponent;
 
+    /// <summary>
+    /// Initialize the specified scoreTracker.
+    /// </summary>
+    /// <returns>The initialize.</returns>
+    /// <param name="scoreTracker">Score tracker.</param>
     [Inject]
     public void Initialize(ScoreTracker scoreTracker)
     {
@@ -21,6 +35,10 @@ public class SoundManager : MonoBehaviour
         scoreTracker.OnScoreIncreased += OnScoreIncreased;
     }
 
+    /// <summary>
+    /// When the score has increased
+    /// </summary>
+    /// <param name="score">Score.</param>
     private void OnScoreIncreased(int score)
     {
         var pitch = 1.0f;
@@ -33,6 +51,12 @@ public class SoundManager : MonoBehaviour
         OneShot(_soundConfig.ScoreSound, pitch);
     }
 
+    /// <summary>
+    /// Plays an audio clip once
+    /// </summary>
+    /// <param name="clip">Clip.</param>
+    /// <param name="pitch">Pitch.</param>
+    /// <param name="volume">Volume.</param>
     private static void OneShot(AudioClip clip, float pitch = 1.0f, float volume = 1.0f)
     {
         if (null == clip)
@@ -47,6 +71,10 @@ public class SoundManager : MonoBehaviour
         Destroy(obj, clip.length / pitch);
     }
 
+    /// <summary>
+    /// Starts the background music
+    /// </summary>
+    /// <param name="levelNumber">Level number.</param>
     public void StartBGM(int levelNumber)
     {
         if(_audioComponent == null)
@@ -62,11 +90,19 @@ public class SoundManager : MonoBehaviour
         _audioComponent.Play();
     }
 
+    /// <summary>
+    /// Stops the background music
+    /// </summary>
     public void StopBGM()
     {
         _audioComponent.Stop();
     }
 
+    /// <summary>
+    /// Determines the background music's pitch amount by the current level
+    /// </summary>
+    /// <returns>The BGMP itch by level.</returns>
+    /// <param name="levelNumber">Level number.</param>
     private float DetermineBGMPitchByLevel(int levelNumber)
     {
         var pitchMod = levelNumber * (float)Math.Pow(-1, levelNumber) * 0.05f;
