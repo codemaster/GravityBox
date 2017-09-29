@@ -12,6 +12,7 @@ public class Dependencies : MonoInstaller<Dependencies>
     {
         Container.Bind<ScoreTracker>().ToSelf().AsSingle();
         Container.Bind<TimeTracker>().ToSelf().AsSingle();
+        Container.Bind<TimerDisplay>().FromComponentInHierarchy().AsSingle();
         Container.Bind<LevelConfig>().FromInstance(_levelConfig).AsSingle();
         Container.Bind<SoundManager>().FromComponentInNewPrefab(_soundManagerPrefab)
                  .AsSingle().NonLazy();
