@@ -10,6 +10,7 @@ public class Dependencies : MonoInstaller<Dependencies>
     
     public override void InstallBindings()
     {
+        Container.Bind<PostProcessingManager>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<ScoreTracker>().ToSelf().AsSingle();
         Container.Bind<TimeTracker>().ToSelf().AsSingle();
         Container.Bind<TimerDisplay>().FromComponentInHierarchy().AsSingle();

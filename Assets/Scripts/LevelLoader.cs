@@ -13,6 +13,18 @@ public class LevelLoader : MonoBehaviour
 	/// </summary>
 	public int LevelNumber { get; private set; } = 1;
 
+    /// <summary>
+    /// Gets the total number of levels.
+    /// </summary>
+    /// <value>The total number of levels.</value>
+    public int TotalLevels
+    {
+        get
+        {
+            return _levelConfig.LevelScenes.Count;
+        }
+    }
+
 	/// <summary>
 	/// The next level to load
 	/// </summary>

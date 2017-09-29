@@ -50,16 +50,24 @@ public class LevelManager
     /// </summary>
     private EndLevelButton _endLevelButton;
 
+    /// <summary>
+    /// The post processing manager.
+    /// </summary>
+    private PostProcessingManager _postProcessingManager;
+
 	/// <summary>
 	/// Constructor
 	/// </summary>
-    /// <param name="levelLoader">Level loader.</param>
+	/// <param name="levelLoader">Level loader.</param>
 	/// <param name="levelCamera">Level camera.</param>
 	/// <param name="gravityController">Gravity controller.</param>
-    /// <param name="timeTracker">Time Tracker.</param>
+	/// <param name="soundManager">Sound manager.</param>
 	/// <param name="scoreTracker">Score tracker.</param>
+	/// <param name="timeTracker">Time Tracker.</param>
 	/// <param name="levelIntroText">Level intro text.</param>
-    /// <param name="endLevelButton">End level button.</param>
+    /// <param name="levelOutroText">Level outro text.</param>
+	/// <param name="endLevelButton">End level button.</param>
+	/// <param name="postProcessingManager">Post processing manager.</param>
 	public LevelManager(
         LevelLoader levelLoader,
         LevelCamera levelCamera,
@@ -69,7 +77,8 @@ public class LevelManager
         TimeTracker timeTracker,
         LevelIntroText levelIntroText,
         LevelOutroText levelOutroText,
-        EndLevelButton endLevelButton)
+        EndLevelButton endLevelButton,
+        PostProcessingManager postProcessingManager)
     {
         if (null == levelLoader)
         {
@@ -107,6 +116,10 @@ public class LevelManager
         {
             throw new ArgumentNullException(nameof(endLevelButton));
         }
+        if (null == postProcessingManager)
+        {
+            throw new ArgumentNullException(nameof(postProcessingManager));
+        }
 
         _levelLoader = levelLoader;
         _levelCamera = levelCamera;
@@ -117,6 +130,7 @@ public class LevelManager
         _levelIntroText = levelIntroText;
         _levelOutroText = levelOutroText;
         _endLevelButton = endLevelButton;
+        _postProcessingManager = postProcessingManager;
 
         // Setup callbacks
         _scoreTracker.OnScoreIncreased += OnScoreIncreased;
@@ -135,6 +149,10 @@ public class LevelManager
 
 		// Reset & recalculate the target score when the scene has loaded
 		_scoreTracker.Initialize();
+
+        // Setup post-processing
+        _postProcessingManager.ApplyPostProcessing(_levelLoader.LevelNumber,
+                                                   _levelLoader.TotalLevels);
 	}
 
     /// <summary>
