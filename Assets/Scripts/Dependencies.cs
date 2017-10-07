@@ -32,7 +32,7 @@ public class Dependencies : MonoInstaller<Dependencies>
         Container.BindMemoryPool<ParticleSystem, SparksPool>().FromComponentInNewPrefab(_sparks);
         Container.Bind<PostProcessingManager>().FromComponentInHierarchy().AsSingle().NonLazy();
         Container.Bind<ScoreTracker>().ToSelf().AsSingle();
-        Container.Bind<TimeTracker>().ToSelf().AsSingle();
+        Container.Bind<TimeTracker>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
         Container.Bind<TimerDisplay>().FromComponentInHierarchy().AsSingle();
         Container.Bind<LevelConfig>().FromInstance(_levelConfig).AsSingle();
         Container.Bind<SoundManager>().FromComponentInNewPrefab(_soundManagerPrefab)

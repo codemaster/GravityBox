@@ -1,13 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEngine;
+using Zenject;
 
 /// <summary>
 /// Keeps track of level timers
 /// </summary>
-public class TimeTracker
+public class TimeTracker : MonoBehaviour
 {
+    /// <summary>
+    /// The time display
+    /// </summary>
     private TimerDisplay _display;
+
+    /// <summary>
+    /// The level loader.
+    /// </summary>
+    private LevelLoader _levelLoader;
     
     /// <summary>
     /// The timers per level index
@@ -16,17 +26,25 @@ public class TimeTracker
         = new Dictionary<int, Stopwatch>();
 
     /// <summary>
-    /// Constructor
+    /// Initializer
     /// </summary>
     /// <param name="display">Display.</param>
-    public TimeTracker(TimerDisplay display)
+    [Inject]
+    public void Initialize(
+        TimerDisplay display,
+        LevelLoader levelLoader)
     {
         if (null == display)
         {
             throw new ArgumentNullException(nameof(display));
         }
+        if (null == levelLoader)
+        {
+            throw new ArgumentNullException(nameof(levelLoader));
+        }
 
         _display = display;
+        _levelLoader = levelLoader;
     }
 
     /// <summary>
@@ -105,4 +123,62 @@ public class TimeTracker
         }
         return milliseconds;
     }
+
+    /// <summary>
+    /// Pauses the time tracker
+    /// </summary>
+    /// <param name="level">Level.</param>
+    private void Pause(int level)
+    {
+        Stopwatch timer = GetTimer(level);
+        if(timer != null)
+        {
+            timer.Stop();
+        }
+    }
+
+    /// <summary>
+    /// Resumes the time tracker
+    /// </summary>
+    /// <param name="level">Level.</param>
+    private void Resume(int level)
+    {
+        Stopwatch timer = GetTimer(level);
+        if(timer != null)
+        {
+            timer.Start();
+        }
+    }
+
+	/// <summary>
+	/// On the application focus change.
+	/// </summary>
+	/// <param name="hasFocus">If set to <c>true</c>, app has focus.</param>
+	private void OnApplicationFocus(bool hasFocus)
+	{
+		if (hasFocus)
+		{
+			Resume(_levelLoader.LevelNumber);
+		}
+		else
+		{
+			Pause(_levelLoader.LevelNumber);
+		}
+	}
+
+	/// <summary>
+	/// On the application pause change.
+	/// </summary>
+	/// <param name="pauseStatus">If set to <c>true</c>, the app is paused.</param>
+	private void OnApplicationPause(bool pauseStatus)
+	{
+		if (pauseStatus)
+		{
+			Pause(_levelLoader.LevelNumber);
+		}
+		else
+		{
+			Resume(_levelLoader.LevelNumber);
+		}
+	}
 }
