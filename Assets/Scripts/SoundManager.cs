@@ -99,6 +99,22 @@ public class SoundManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Pauses the bgm.
+    /// </summary>
+    public void PauseBGM()
+    {
+        _audioComponent.Pause();
+    }
+
+    /// <summary>
+    /// Unpauses the bgm.
+    /// </summary>
+    public void UnpauseBGM()
+    {
+        _audioComponent.UnPause();
+    }
+
+    /// <summary>
     /// Determines the background music's pitch amount by the current level
     /// </summary>
     /// <returns>The BGMP itch by level.</returns>

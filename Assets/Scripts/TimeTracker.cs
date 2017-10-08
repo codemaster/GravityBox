@@ -128,7 +128,7 @@ public class TimeTracker : MonoBehaviour
     /// Pauses the time tracker
     /// </summary>
     /// <param name="level">Level.</param>
-    private void Pause(int level)
+    public void Pause(int level)
     {
         Stopwatch timer = GetTimer(level);
         if(timer != null)
@@ -141,7 +141,7 @@ public class TimeTracker : MonoBehaviour
     /// Resumes the time tracker
     /// </summary>
     /// <param name="level">Level.</param>
-    private void Resume(int level)
+    public void Resume(int level)
     {
         Stopwatch timer = GetTimer(level);
         if(timer != null)
